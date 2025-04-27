@@ -3,7 +3,7 @@
 
 # Task 1 - Sign Up To All Services
 
-**Introducion Video:**
+**Video:**
 
 [SCRIPT]
 Hey there! Before we dive into debugging, we need to get our tools ready. I'll see you on the other side!
@@ -28,7 +28,7 @@ Hey there! Before we dive into debugging, we need to get our tools ready. I'll s
 - Dynatrace trial account activated
 - All services are accessible and working
     
-**Solution Video:**
+**Solution:**
 
 [SCRIPT]
 Great! Let me show you what it looks like when everything is set up correctly:
@@ -45,11 +45,13 @@ Next we'll create our Rails app.
 
 # Task 2 - Create the App in Replit
 
+**Introduction:**
 ```
 Now that we have our accounts set up, let's create our Rails app.
 
 I'll show you how to use the template I've prepared that will help us learn debugging techniques. We'll be building a cross-stitch pattern preview generator - it's a real business problem that will let us explore common debugging scenarios. Let's get started!
 ```
+
 
 **Description:**
 
@@ -82,9 +84,19 @@ You’re all set up!
 * App running in Replit
 * Home page "Upload Pattern" is showing
 
+**Solution:**
+
+TODO
+
 
 
 # Task 3 - See The Defect
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 Log into Replit.
 
@@ -128,9 +140,18 @@ Wait… and wait… the app hangs and no images are shown.
 - Reproduced the bug with Puffins pattern
 
 
+**Solution:**
+
+TODO
 
 
 # Task - Show Errors
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 Two options.
 
@@ -156,11 +177,31 @@ Open up the error and see the stack trace:
 
 We can see that the error is coming from `Pattern#add_border_to_preview`.
 
+Any other ideas why? Give yourself a strict timebox of 1 minute.
+
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+No, I didn't come up with anything either.
+
 This is usually what you get from any error tracking tools.
 
 But why is the app crashing? The code is too complex to diagnose from this.
 
+
+
+
+
 # Task - Five Steps to Observable Software
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 Introducing the five steps to observable software.
 
@@ -186,6 +227,12 @@ After you've got 3 guesses, rank them by likelihood.
 
 Most likely at the top, least likely at the bottom.
 
+**Acceptance Criteria:**
+
+* 3 hypotheses created
+* Rank the hypotheses from most likely to least likely
+
+
 **Solution:**
 
 Here were mine:
@@ -204,6 +251,12 @@ Here were mine:
 
 
 # Task - Convert Hypothesis into Question
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 ## Hypothesis #1 - Pattern is too small or too big
 
@@ -243,6 +296,12 @@ Here's the question we'll ask:
 
 # Task - Decide Data
 
+**Introduction:**
+
+TODO
+
+**Description:**
+
 Next we need to decide on the data to gather for this question.
 
 Let's look at how to decide what data to gather by using a different example:
@@ -275,6 +334,10 @@ GROUP BY HOUR(timestamp)
 ORDER BY timestamp;
 ```
 
+**Acceptance Criteria:**
+
+TODO
+
 **Solution:**
 
 **Event**: `Pattern#add_border_to_preview` called
@@ -293,7 +356,15 @@ FROM events
 WHERE event.name == 'Pattern#add_border_to_preview called'
 ```
 
+
+
 # Task - 3a. Build - Install Structured Logging
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 Now that we've identified what data we need to gather, let's set up the instrumentation to actually collect it. We'll use Semantic Logger with OpenTelemetry formatting to send our metrics to Dynatrace.
 
@@ -382,7 +453,25 @@ class FlatJsonFormatter < SemanticLogger::Formatters::Raw
   end
 end
 ```
+
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+TODO
+
+
+
+
 # Task - 3c. Build - Create a log appender
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 Create a new file in `config/initializers/semantic_logger.rb` :
 
@@ -411,7 +500,24 @@ This will send the logs to Dynatrace.
 
 Next to set up the Dynatrace secrets.
 
+
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+TODO
+
+
+
 # Task - 3d. Build - Generate Dynatrace Secrets
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 Open Dynatrace.
 
@@ -439,7 +545,23 @@ Press “Copy” button to put API token into the clipboard:
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2030.png)
 
+
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+TODO
+
+
 # Task - 3e. Build - Add Dynatrace Secrets To Replit
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 Now switch back to Replit.
 
@@ -471,7 +593,23 @@ Add a new secret in Replit called `DYNATRACE_APP_ID`:
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2036.png)
 
+
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+TODO
+
+
 # Task - 3f. Build - Check Dynatrace Logs
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 Hit `Run` at the top of the screen again.
 
@@ -512,8 +650,23 @@ You’ll see logs:
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2044.png)
 
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+TODO
+
+
+
 # Task - 3g. Build - Simulate Users
 
+**Introduction:**
+
+TODO
+
+**Description:**
 Now we need to simulate users using the app.
 
 Switch back to Replit.
@@ -538,7 +691,25 @@ Wait for the script to complete. If you’ve run it via the GUI you’ll need to
 
 Next we’ll use the graphs.
 
+
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+TODO
+
+
+
+
 # Task - 4a. Use - Find Errors in the Logs
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 Keep hitting `Run Query` until you get an `ERROR` shown at the right:
 
@@ -599,8 +770,25 @@ No, nor can I.
     
     It’s a force multiplier for you and your team. 🚀
     
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+TODO
+
+
 
 ## Task - 3. Build - Add Data Needed
+
+
+**Introduction:**
+
+TODO
+
+**Description:**
+
 
 We already decided which data to gather - we've spent this long just getting *any* logs into the system.
 
@@ -681,8 +869,24 @@ Add the added lines indicated below:
     - Note the event - `app.pattern.border_added_to_preview` is namespaced and in the past tense
     - Note how clumsy the logging is and how much code is needed. There are nicer ways to organise our code, but they’re out of scope for this workshop.
 
+
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+TODO
+
+
+
 ## Task - 4b. Use - See Extra Attributes In Logs
 
+**Introduction:**
+
+TODO
+
+**Description:**
 Restart the server (Hit “Stop” then “Run”)
 
 Hammer the server again.
@@ -727,8 +931,23 @@ FROM events
 WHERE name = 'app.pattern.border_added_to_preview'
 ```
 
+
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+TODO
+
+
 ## Task - 4c. Use - Show Attributes As Columns
 
+**Introduction:**
+
+TODO
+
+**Description:**
 Click on a specific error - `Error adding border to preview`
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2061.png)
@@ -767,7 +986,24 @@ You’ll see the attributes we care about:
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2067.png)
 
+
+**Acceptance Criteria:**
+
+TODO
+
+**Solution:**
+
+TODO
+
+
+
 ## Task - 4d. Use - Show All Logs
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 We want to show **all** logs, not just errors.
 
@@ -797,13 +1033,24 @@ Take a moment to look at this.
 
 Are there any patterns you can see in the height and the width?
 
+
+**Acceptance Criteria:**
+
+TODO
+
 **Solution:**
     
 Seems like for most the errors, the width is more than the height. Interesting…
-
+    
 
     
 # Task - 1 - Question - Form New Hypothesis
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 We've got the answer to our first question.
 
@@ -831,6 +1078,10 @@ Can you think of a hypothesis related to orientation?
 
 And can you think of a question that you can answer definitively that will lead to that hypothesis being proven as right or wrong?
     
+**Acceptance Criteria:**
+
+TODO
+
 **Solution:**
 
 **Hypothesis:** Specific orientations cause the errors.
@@ -840,6 +1091,12 @@ And can you think of a question that you can answer definitively that will lead 
 
 # Task - 2 - Define Data - Explore Group By
 
+**Introduction:**
+
+TODO
+
+**Description:**
+
 **Question:** Do all errors happen with a specific orientation?
 
 When establishing correlations, `GROUP BY` is **very powerful**.
@@ -847,6 +1104,10 @@ When establishing correlations, `GROUP BY` is **very powerful**.
 Can you think of a few fields we can group by to explore this question?
 
 And then can you write a SQL statement that reflects this?
+
+**Acceptance Criteria:**
+
+TODO
 
 **Solution**
 
@@ -870,8 +1131,14 @@ GROUP BY error, app.pattern.orientation
 ```
 
 
+
 # Task - 3 - Build - Add Orientation
 
+**Introduction:**
+
+TODO
+
+**Description:**
 We’re missing orientation in Dynatrace.
 
 Open `app/models/pattern.rb` again and go to `#add_border_to_preview`
@@ -890,8 +1157,9 @@ This gets the `orientation` attribute from the `Pattern` model and adds it into 
       "app.pattern.width" => width,
       "code.namespace" => "Pattern",
       "code.function.name" => "add_border_to_preview",
-      "app.code.args.size" => size,
-      **"app.pattern.orientation" => orientation**
+-     "app.code.args.size" => size
++     "app.code.args.size" => size,
++     "app.pattern.orientation" => orientation
     ) do
       preview_image = MiniMagick::Image.read(preview.download)
 ```
@@ -902,9 +1170,24 @@ This gets the `orientation` attribute from the `Pattern` model and adds it into 
 
 Wait for a few minutes for the logs to come through into Dynatrace.
 
+**Acceptance Criteria:**
+
+* Add orientation as an extra attribute in the logs
+* Restart the server
+* Run `bin/hammer` again
+
+**Solution**
+
+Added the orientation as a code attribute.
+
 
 # Task - 4. Use - Explore In Dynatrace
 
+**Introduction:**
+
+TODO
+
+**Description:**
 Go back to the query in Dynatrace.
 
 Set the time range back to `30 minutes` to see the most recent logs:
@@ -939,6 +1222,12 @@ Press `Run query` and list out all the combinations you find.
 
 What's the answer to our question?
 
+**Acceptance Criteria:**
+
+* Group by error and orientation in the logs
+* List out all the combinations
+* Write down an answer to the question
+
 **Solution:**
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2075.png)
@@ -949,15 +1238,21 @@ Square and portrait images **always** work and landscape **always** errors.
 
 ## **Answer: Every error is in landscape format**.
 
+
+
+
 # Task - 4b. Use - Reason About Answer
 
-We’ve got an answer to our question!
+**Introduction:**
 
+TODO
+
+**Description:**
 Do we have enough data to fix the issue?
 
 With this new data, let’s read some code.
 
-What uses the orientation?
+What uses the `orientation`?
 
 ```
   def add_border_to_preview(size)
@@ -996,9 +1291,13 @@ Let’s look at that **`PREVIEW_WITH_BORDER_DIMENSIONS`**  hash:
   }
 ```
 
-What might be going wrong here?
+What might be going wrong here? How might we fix the code?
 
 When you've got an idea, move on.
+
+**Acceptance Criteria:**
+
+TODO
 
 **Solution:**
 
@@ -1014,6 +1313,12 @@ To fix this, we’ll add a few lines to **`PREVIEW_WITH_BORDER_DIMENSIONS`:**
 
 
 ## Task - Fix Defect
+
+**Introduction:**
+
+TODO
+
+**Description:**
 
 I’ve created a fix you can just apply:
 
@@ -1033,159 +1338,33 @@ Run the server, upload Puffins.fcjson again:
 
 [Puffins.fcjson](https://drive.google.com/uc?export=download&id=15MwbJ1gPnE9gz---EGS0PuWdW1TcQzVE)
 
-And you’ll see the images are generated! Hurrah!
-
-![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2076.png)
-
 # Resources
 
 Cheat Sheet: [https://joyfulprogramming.notion.site/fix-bugs-20x-faster-cheat-sheet](https://joyfulprogramming.notion.site/fix-bugs-20x-faster-cheat-sheet)
 
-# ⚠️ Take Action! ⚠️
 
-The most important part of the whole workshop! #hyperbole
+**Acceptance Criteria:**
 
-## What will change?
+TODO
 
-- You've come to this workshop
-- You've invested time
-- Time is precious
+**Solution:**
 
-What's going to be the ROI on your investment?
+You’ll see the images are generated! Hurrah!
 
-**You get to decide.**
+![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2076.png)
 
-### Definition of Learning
 
-Learning is given same environment, taking a different action.
+# Task - Wrap Up
 
-**If you don't change your actions, you haven't learned.**
+**Introduction:**
 
-## Decide Today!
+TODO
 
-What's your next step?
+**Description:**
 
-Three options.
+You've got through this course. Great!
 
-1. Do Nothing
-
-Total respect for being honest. :)
-
-You may not feel ready. You may not be able to decide next steps.
-
-Either way, it's OK to take no action.
-
-Go about your day. Enjoy!
-
-2. I'm Not Sure
-
-Come and speak to me afterwards.
-
-If you can’t… things to think about:
-
-- Is this topic important to you?
-- Why did you come today? Was it "just out of interest"? Or did you want to solve a problem?
-- What's behind the hesitation? Is it a lack of confidence? Do you not feel ready?
-
-3. Take Action
-
-Great! Let's take action.
-
-Lots of people make big scary goals that never happen.
-
-Goals are OK. **Habits are better.**
-
-Habits are more sustainable.
-
-## Challenge
-
-What is one new habit you can start?
-
-### Criteria
-
-- Takes < 30 seconds
-- Has a trigger - "After I do X I will do Y"
-- Trigger can be time based - Alarm on your phone
-
-### Template
-
-I will <action>
-
-After I <trigger>
-
-So I can become <new identity>
-
-## Action
-
-Takes less than 30 seconds. Should not require lots of thought.
-
-Examples:
-
-- Look at the 5 steps of observability
-- Write down the first question in my head
-- Imagine solving the bug in 20 minutes
-- Take a deep breath
-- Open your observability tool
-
-## Trigger
-
-What will trigger this new habit?
-
-- Move a bug ticket into in progress
-- See a defect in our Slack channel
-- Complain about how many defects we have
-- My alarm goes off
-- Open my laptop
-
-## Identity
-
-The fun bit! What kind of identity do you want to have?
-
-- Careful engineer
-- Observability expert
-- Well rounded programmer
-- Considerate colleague
-- Effective professional
-
-## Putting It All Together
-
-Examples:
-
-I will look at the 5 steps of observability diagram
-
-After I open my laptop
-
-So I can become a better engineer
-
-I will write down the first question I think of
-
-After I move a bug ticket into in progress
-
-So I can become a more curious programmer
-
-I will open my observability tool
-
-After I open my laptop
-
-So I can become a more effective professional
-
-## Your Turn!
-
-Construct your new habit.
-
-Then message me on LinkedIn to commit!
-
-[https://www.linkedin.com/in/synapticmishap/](https://www.linkedin.com/in/synapticmishap/)
-
-## Habit Tools
-
-Here’s what I use to help me stay on track:
-
-- [Atoms - app to track habits](https://atoms.jamesclear.com/)
-- [Beeminder - commit to habits with money on the line](https://www.beeminder.com/)
-- [Intend - set intentions for the day ahead](https://intend.do/)
-
-## Additional Provoking Questions
+Now to reflect on what you've learned.
 
 - What's the biggest problem for your company that could be helped by the techniques you learned today?
 - What's the tiniest improvement you could make to help this?
@@ -1195,6 +1374,4 @@ Here’s what I use to help me stay on track:
 
 ## Want More?
 
-Book a call with me to explore more options:
-
-[https://calendly.com/synapticmishap/project-work?utm_medium=landing_page&utm_source=linktree&utm_campaign=chat%20to%20me%20for%20free&month=2025-02](https://calendly.com/synapticmishap/project-work?utm_medium=landing_page&utm_source=linktree&utm_campaign=chat%20to%20me%20for%20free&month=2025-02)
+Explore the next segment of the course, coming soon!
