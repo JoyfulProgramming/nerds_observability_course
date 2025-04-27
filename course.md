@@ -96,48 +96,81 @@ Next, try to reproduce the bug:
 
 This is the bug we'll be investigating and fixing throughout this workshop.
 
+We've got some error tracking in our app courtesy of Solid Errors.
 
-**Acceptance Criteria:**
-- Successfully ran the application in Replit
-- Successfully generated preview for MonaLisa pattern
-- Reproduced the bug with Puffins pattern
-- Understood the basic application workflow
+Let's see the error we've just created.
 
-[SCRIPT]
-So here's what you should have seen.
-
-I start the app.
-
-Watch what happens when I upload this MonaLisa pattern... it works perfectly! The preview generates in about 30 seconds.
-
-But now, let me show you the bug. I'll upload this Puffins pattern and... nothing happens. The app just hangs.
-
-This is the mystery we'll solve together using modern debugging techniques. Let's get started!
-[END SCRIPT]
-
-
-### 3. Set Up Basic Error Tracking
-
-**Introduction:** With the bug reproduced, we'll start implementing basic error tracking.
-
-**Description:** To begin debugging, we need to see the errors that are occurring. Follow these steps:
-
-1. In Replit, access the error logs using one of these methods:
+1. In Replit, access the errors using one of these methods:
    - Use the top menu dropdown and click the Play icon next to 'Show Errors'
-   - OR press `Command Shift P`, type 'Shell', and run `bin/errors`
+   - OR press the magnifying glass at the top right of the screen, type 'Shell' to open a console, and run `bin/errors`
 
 2. Examine the error output:
    - Look for the stack trace
    - Identify that the error is coming from `Pattern#add_border_to_preview`
 
-3. Install the required logging gems:
+This is usually what you get from any error tracking tools.
+
+But why is the app crashing? The code is too complex to diagnose from this.
+
+**Acceptance Criteria:**
+- Successfully ran the application in Replit
+- Successfully generated preview for MonaLisa pattern
+- Reproduced the bug with Puffins pattern
+- See the stack trace in error tracking software
+
+
+[SCRIPT]
+
+I start the app. Upload Mona Lisa, success.
+
+Then Puffins... nothing. Go into the error tracking page and here's the error.
+
+Stack traces like this were introduced in the early 1970s.
+
+They're way too basic for the complex distributed apps we have nowadays.
+
+I see a lot of teams struggling trying to fix errors in complex apps using just stack traces.
+
+And when that doesn't work? They'll guess. They'll read the codebase. All a waste of time.
+
+I'll show you a better way of debugging this error using observability.
+[END SCRIPT]
+
+
+### 3. Set Up Structured Logging
+
+[SCRIPT]
+If stack traces are not enough, what do we need instead?
+
+One of three data types - traces, logs or metrics. Note - these are NOT pillars.
+
+This task focusses on logging as it's the most accessible to get started with.
+
+Out of the box Rails only has plain text logging, which is woefully inadequate to answer any complex question.
+
+Instead, we want structured logging. This allows us to capture structured data which we can sort and filter on just like we do in a SQL database.
+
+Let's add structured logging to the Rails app.
+[END SCRIPT]
+
+**Introduction:** With the bug reproduced, the first step is to add structured logging.
+
+**Description:** Add structured logging to our Rails app by following these steps:
+
+1. Install the required logging gems:
 ```bash
 bundle add semantic_logger rails_semantic_logger
 ```
 
 4. Create a new file `lib/flat_json_formatter.rb` with the provided formatter code
 
+```ruby
+```
+
 5. Create `config/initializers/semantic_logger.rb` with the logging configuration
+
+```ruby
+```
 
 This setup will allow us to start gathering more detailed information about the errors occurring in our application.
 
@@ -145,9 +178,19 @@ This setup will allow us to start gathering more detailed information about the 
 - Semantic Logger gems installed successfully
 - Flat JSON formatter created and configured
 - Semantic Logger initializer created
-- Error logs are accessible and readable
 
-### 4. Implement Detailed Error Logging
+[SCRIPT]
+We've set up some basic config for structured logging, so there won't be much to see yet.
+
+Next we'll instrument our code.
+[END SCRIPT]
+
+### 4. Instrument
+
+[SCRIPT]
+
+
+[END SCRIPT]
 
 **Introduction:** With basic error tracking in place, we'll add more detailed logging to help identify the root cause.
 
