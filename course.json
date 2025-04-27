@@ -1,0 +1,107 @@
+{
+  "project": {
+    "title": "Fix Bugs 20x Faster - From Zero to Incident Superhero Workshop",
+    "description": "Learn how to diagnose and fix bugs 20x faster using modern observability techniques and a systematic approach to debugging.",
+    "sprints": [
+      {
+        "title": "Tasks",
+        "tasks": [
+          {
+            "introduction": "Before we can start debugging, we need to set up our development environment with all the necessary tools and services.",
+            "title": "Set Up Your Development Environment",
+            "description": "To get started with this workshop, you'll need to set up three key services:\n\n1. **GitHub Account Setup**\n   - Go to [GitHub Signup](https://github.com/signup)\n   - Complete the registration process\n\n2. **Replit Account Setup**\n   - Visit [Replit Signup](https://replit.com/signup)\n   - Create your account\n   - Navigate to the template: [Fix Bugs 20x Faster Template](https://replit.com/@johngallagher2/Fix-Bugs-20x-Faster)\n   - Click 'Remix Template' to create your own copy\n\n3. **Dynatrace Account Setup**\n   - Go to [Dynatrace Signup](https://www.dynatrace.com/signup)\n   - Sign up for the 15-day free trial\n   - Enter your email and details\n   - Wait for account setup confirmation\n\nOnce you have access to all three services, proceed to the next task.",
+            "acceptance_criteria": [
+              "GitHub account created and verified",
+              "Replit account created and template remixed",
+              "Dynatrace trial account activated",
+              "All services are accessible and working"
+            ],
+            "learning_materials": [
+              {
+                "url": "https://github.com/signup"
+              },
+              {
+                "url": "https://replit.com/signup"
+              },
+              {
+                "url": "https://www.dynatrace.com/signup"
+              }
+            ]
+          },
+          {
+            "introduction": "Now that we have our environment set up, let's understand the business problem we're trying to solve.",
+            "title": "Understand the Cross-Stitch Pattern Preview Problem",
+            "description": "You're working on a cross-stitch pattern business application that helps designers upload pattern previews to their Etsy shop. The application:\n\n- Is built with Ruby on Rails\n- Takes FCJSON files from FlossCross\n- Renders preview images\n\nTo see the current functionality:\n\n1. Press 'Run' in your Replit environment\n2. Wait for the webview to open\n3. Download the sample `MonaLisa.fcjson` file\n4. Upload it to the application\n5. Click 'Update Pattern'\n6. Wait ~30 seconds to see the generated image\n\nNext, try to reproduce the bug:\n\n1. Go back to the home page\n2. Download and upload the `Puffins.fcjson` file\n3. Observe that the app hangs and no images are shown\n\nThis is the bug we'll be investigating and fixing throughout this workshop.",
+            "acceptance_criteria": [
+              "Successfully ran the application in Replit",
+              "Successfully generated preview for MonaLisa pattern",
+              "Reproduced the bug with Puffins pattern",
+              "Understood the basic application workflow"
+            ],
+            "learning_materials": []
+          },
+          {
+            "introduction": "With the bug reproduced, we'll start implementing basic error tracking.",
+            "title": "Set Up Basic Error Tracking",
+            "description": "To begin debugging, we need to see the errors that are occurring. Follow these steps:\n\n1. In Replit, access the error logs using one of these methods:\n   - Use the top menu dropdown and click the Play icon next to 'Show Errors'\n   - OR press `Command Shift P`, type 'Shell', and run `bin/errors`\n\n2. Examine the error output:\n   - Look for the stack trace\n   - Identify that the error is coming from `Pattern#add_border_to_preview`\n\n3. Install the required logging gems:\n```bash\nbundle add semantic_logger rails_semantic_logger\n```\n\n4. Create a new file `lib/flat_json_formatter.rb` with the provided formatter code\n\n5. Create `config/initializers/semantic_logger.rb` with the logging configuration\n\nThis setup will allow us to start gathering more detailed information about the errors occurring in our application.",
+            "acceptance_criteria": [
+              "Semantic Logger gems installed successfully",
+              "Flat JSON formatter created and configured",
+              "Semantic Logger initializer created",
+              "Error logs are accessible and readable"
+            ],
+            "learning_materials": []
+          },
+          {
+            "introduction": "With basic error tracking in place, we'll add more detailed logging to help identify the root cause.",
+            "title": "Implement Detailed Error Logging",
+            "description": "We need to add more context to our logs to understand what's happening when the error occurs. Modify the `Pattern#add_border_to_preview` method in `app/models/pattern.rb`:\n\n1. Add the following logging context:\n```ruby\ndef add_border_to_preview(size)\n  SemanticLogger.tagged(\n    \"app.pattern.id\" => id,\n    \"app.pattern.height\" => height,\n    \"app.pattern.width\" => width,\n    \"code.namespace\" => \"Pattern\",\n    \"code.function.name\" => \"add_border_to_preview\",\n    \"app.code.args.size\" => size\n  ) do\n    # ... existing code ...\n    Rails.logger.info(\n      message: \"Border added to preview\",\n      \"event.name\" => \"app.pattern.border_added_to_preview\"\n    )\n  rescue StandardError => e\n    Rails.logger.error(\n      message: \"Error adding border to preview\",\n      \"event.name\" => \"app.pattern.border_added_to_preview\",\n      exception: e\n    )\n    raise e\n  end\nend\n```\n\nThis will give us crucial information about the pattern dimensions and operation status.",
+            "acceptance_criteria": [
+              "Added logging context to Pattern#add_border_to_preview",
+              "Implemented success and error logging",
+              "Logs include pattern dimensions",
+              "Logs include operation status"
+            ],
+            "learning_materials": []
+          },
+          {
+            "introduction": "Now that we have detailed logging, let's analyze the data to identify patterns in the errors.",
+            "title": "Analyze Error Patterns Using Dynatrace",
+            "description": "Use Dynatrace to analyze the error patterns:\n\n1. Run the test script to generate more data:\n   - Click the dropdown next to 'Stop'\n   - Select 'Hammer' or run `bin/hammer` in the console\n\n2. In Dynatrace:\n   - Navigate to Logs\n   - Filter for `event.name = \"app.pattern.border_added_to_preview\"`\n   - Add columns for `error`, `app.pattern.height`, and `app.pattern.width`\n   - Sort by the `error` column\n\n3. Analyze the data to identify patterns:\n   - Look for correlations between errors and pattern dimensions\n   - Notice that errors occur when width is greater than height\n\nThis analysis suggests the issue might be related to image orientation.",
+            "acceptance_criteria": [
+              "Generated test data using the hammer script",
+              "Set up appropriate filters in Dynatrace",
+              "Identified correlation between errors and dimensions",
+              "Recognized potential orientation-related issue"
+            ],
+            "learning_materials": []
+          },
+          {
+            "introduction": "Having identified a potential orientation issue, let's add orientation tracking to confirm our hypothesis.",
+            "title": "Add Orientation Tracking",
+            "description": "To verify if orientation is the root cause, add orientation tracking to our logs:\n\n1. Update the logging context in `Pattern#add_border_to_preview`:\n```ruby\nSemanticLogger.tagged(\n  \"app.pattern.id\" => id,\n  \"app.pattern.height\" => height,\n  \"app.pattern.width\" => width,\n  \"code.namespace\" => \"Pattern\",\n  \"code.function.name\" => \"add_border_to_preview\",\n  \"app.code.args.size\" => size,\n  \"app.pattern.orientation\" => orientation\n) do\n```\n\n2. In Dynatrace, create a new query to analyze orientation data:\n```\nfetch logs\n| filter matchesValue(event.name, \"app.pattern.border_added_to_preview\")\n| summarize count(), by: { error, app.pattern.orientation }\n```\n\n3. Analyze the results to confirm if all errors occur with landscape orientation.",
+            "acceptance_criteria": [
+              "Added orientation to logging context",
+              "Created orientation analysis query in Dynatrace",
+              "Confirmed correlation between errors and orientation",
+              "Identified missing landscape configuration as root cause"
+            ],
+            "learning_materials": []
+          },
+          {
+            "introduction": "Now that we've confirmed the root cause, let's implement the fix.",
+            "title": "Implement the Fix for Landscape Orientation",
+            "description": "The root cause has been identified: the `PREVIEW_WITH_BORDER_DIMENSIONS` hash is missing the `:landscape` configuration. To fix this:\n\n1. Apply the fix using git:\n```bash\ngit fetch\ngit stash\ngit cherry-pick e8d138ec16991d26b683c11a0ecdaa175ab3871c\ngit stash pop\n```\n\n2. Verify the fix:\n   - Restart the server\n   - Upload the Puffins.fcjson file again\n   - Confirm that the preview images are generated successfully\n\n3. Review the logs in Dynatrace to confirm no more orientation-related errors are occurring.",
+            "acceptance_criteria": [
+              "Applied the landscape orientation fix",
+              "Successfully generated Puffins pattern preview",
+              "Verified no new orientation-related errors",
+              "Confirmed fix addresses root cause"
+            ],
+            "learning_materials": []
+          }
+        ]
+      }
+    ]
+  }
+}
