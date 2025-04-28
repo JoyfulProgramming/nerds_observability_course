@@ -317,6 +317,7 @@ Great! Now you understand the theory, let's apply this process to our problem.
 [ENDSCRIPT]
 
 
+
 # Task - 1a. Question - Form Hypotheses
 
 [SCRIPT]
@@ -394,18 +395,21 @@ Let's turn this guess into a specific question.
 
 [SCRIPT]
 
+We think the pattern is too small or big.
 
-
+Now we convert this into a specific question we can answer with data.
 
 [ENDSCRIPT]
 
 **Introduction:**
 
-TODO
+Now that we have a hypothesis that the pattern size may be causing issues, we need to turn this into a specific, data-driven question that we can investigate.
+
+A good question should be concrete and measurable, helping us validate or invalidate our hypothesis about size-related problems.
 
 **Description:**
 
-## Hypothesis #1 - Pattern is too small or too big
+Hypothesis - Pattern is too small or too big
 
 Focus on this hypothesis. What’s a specific question you could ask?
 
@@ -431,71 +435,109 @@ Think up just one question you could ask that might determine if this hypothesis
 
 **Acceptance Criteria:**
 
-* Thought up a single specific question that can be answered with data about the pattern
+* Created one specific question that can be answered with data
 
 
 **Solution**
 
+[SCRIPT]
+
+This was a tough task.
+
 Here's the question we'll ask:
 
-### Do the errors only happen on just one size of image?
+Do the errors only happen on just one size of image?
 
+We don't know exactly how to answer this question yet.
 
+Next step is to decide which data can answer this question.
+
+[ENDSCRIPT]
 
 
 # Task - Decide Data
 
+[SCRIPT]
+
+To answer the question "Do the errors only happen on just one size of image?" we need to determine what data to collect to validate this theory.
+
+Converting the question into data can be challenging too.
+
+Thinking in events can really help. I'll show you how.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+We'll use a structured approach to decide what attributes to instrument, similar to how we would structure a database query.
 
 **Description:**
 
-Next we need to decide on the data to gather for this question.
-
 Let's look at how to decide what data to gather by using a different example:
 
-Say we had a hypothesis that "The checkout process is slow during peak hours". To investigate this, we would need to decide:
+Say we had a hypothesis "The checkout process is slow during peak hours".
 
-1. Event - What action do we want to track? For checkout speed, we'd track the "checkout completed" event.
+A question might be "Which hour is the checkout process the slowest?".
 
-2. Filter by - Do we want to narrow down the data? For checkout speed, we might not need any filters initially.
+To investigate this, we would need to decide:
 
-3. Group by - How should we organize the data? For checkout times, we might group by hour of day to see peak patterns.
+1. Event - What action do we want to track? For checkout speed, we'd track the `checkout.completed` event.
+
+2. Filter by - Do we want to narrow down the data? In this case we don't need to filter down the events further.
+
+3. Group by - How should we group the data? For checkout times, we might group by hour of day to see peak patterns.
 
 4. Attributes - What specific data points do we need? For checkout speed, we'd want:
    - Timestamp
-   - Duration
-   - Success/failure
+   - P95 of Duration
 
-Using this framework, think about what data YOU need to gather to investigate your pattern size hypothesis. What event would capture the issue? What attributes would help prove or disprove your theory?
+## Think in SQL
 
+Sometimes it's helpful to think in terms of SQL.
 
-Hint - think like a SQL query.
-
-For example, the SQL query in the example above would be:
+Most of the time when we're asking questions we're really doing a query on events.
 
 ```sql
-SELECT timestamp, duration, success
+SELECT timestamp, P95(duration)
 FROM events 
-WHERE event_name = 'checkout_completed'
+WHERE event_name = 'checkout.completed'
 GROUP BY HOUR(timestamp)
 ORDER BY timestamp;
 ```
 
+## Challenge
+
+As a reminder, we want to answer the question:
+
+>  Do the errors only happen on just one size of image?
+
+Using the framework above (Event, Filter By, Group By, Attributes), answer what goes in each category.
+
+Note - sometimes the answer in a category might be "None" or "Not relevant".
+
+Also, please write the SQL version of this query.
+
 **Acceptance Criteria:**
 
-TODO
+* Event to show filled in
+* Filter by filled in
+* Group by filled in
+* Attributes listed
+* SQL version of query
 
 **Solution:**
 
-**Event**: `Pattern#add_border_to_preview` called
+[SCRIPT]
 
-**Filter by**: None
+Here's what I came up with. You won't have this exact thing.
 
-**Group by**: None
+**1. Event**: `Pattern#add_border_to_preview` called
 
-**Attributes**: Width, Height, Error
+**2. Filter by**: None
+
+**3. Group by**: None
+
+**4. Attributes**: Width, Height, Error
 
 In SQL this would be:
 
@@ -505,17 +547,34 @@ FROM events
 WHERE event.name == 'Pattern#add_border_to_preview called'
 ```
 
+Now we've decided which data to collect, we can move on to building the instrumenation to collect this data.
+
+[ENDSCRIPT]
 
 
 # Task - 3a. Build - Install Structured Logging
 
+[SCRIPT]
+
+In this task we're limiting ourselves to using logging.
+
+Traces can be more powerful, but logging is more familiar and easier to get started with.
+
+However, plain text logs aren't enough. We need structured logging.
+
+Rails doesn't have structured logging by default, so we'll add it using a gem.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+Now that we've identified what data we need to gather, let's set up the instrumentation to actually collect it.
+
+We'll install and configure Semantic Logger, which will help us generate structured logs in a format that Dynatrace can understand.
 
 **Description:**
 
-Now that we've identified what data we need to gather, let's set up the instrumentation to actually collect it. We'll use Semantic Logger with OpenTelemetry formatting to send our metrics to Dynatrace.
+We'll use Semantic Logger with OpenTelemetry formatting to send our metrics to Dynatrace.
 
 First, we'll install the required gems and create a custom formatter to properly structure our logs. Then we'll add the instrumentation code to track our pattern size metrics.
 
@@ -558,15 +617,59 @@ Do a `git diff` to make sure the `Gemfile` and `Gemfile.lock` are altered correc
 
 **Acceptance Criteria:**
 
-* 
+* Semantic Logger gem installed
 
 **Solution:**
 
-TODO
+[SCRIPT]
+
+You'll see here I've got Semantic Logger installed.
+
+Here's the diff. Not much else to show.
+
+We need some standardisation of log attributes though - something OpenTelemetry can help with.
+
+Let's look at that next.
+
+[ENDSCRIPT]
 
 
 
 # Task - 3b. Build - Create an OpenTelemetry formatter
+
+[SCRIPT]
+
+For a long time in observability there's been no standards which has increased vendor lock in.
+
+OpenTelemetry can help here with keeping a consistent structure and format for our logs.
+
+We'll add a formatter to do this.
+
+[ENDSCRIPT]
+
+**Introduction:**
+
+OpenTelemetry helps us to keep our logs in a consistent structure and format.
+
+We can do this in Semantic Logger by creating a formatter.
+
+**Description:**
+
+Using OpenTelemetry has a few advantages:
+
+* Consistent format across all services makes logs easier to search and analyze
+* Standard fields like service name, HTTP details, and error status make debugging simpler
+* Better integration with observability tools and platforms
+* Easier to correlate logs across different parts of the system
+* Future-proof as more tools adopt OpenTelemetry as a standard
+
+One misconception is that to get value out of OpenTelemetry engineers must install the Otel libraries.
+
+There's a simpler, lower friction way to get started - use their semantic conventions.
+
+This allows us to slowly opt in to OpenTelemetry in a low risk way without installing another dependency.
+
+This formatter will transform our log entries into a flattened JSON structure that includes service name, HTTP details, and error status.
 
 Open the files sidebar:
 
@@ -615,20 +718,41 @@ end
 
 **Acceptance Criteria:**
 
-TODO
+* Understand the benefits of OpenTelemetry
+* Create an OpenTelemetry formatter for Semantic Logger
 
 **Solution:**
 
-TODO
+[SCRIPT]
+
+Not much to see here - I've got this appender in the right path.
+
+Next step - we'll send the logs off to Dynatrace using this formatter.
+
+[ENDSCRIPT]
 
 
 
+# Task - 3c. Build - Create Dynatrace Appender
 
-# Task - 3c. Build - Create a log appender
+[SCRIPT]
+
+To send logs from our Rails app to Dynatrace, we must write our own appender.
+
+Semantic Logger has a nice design where you can send logs to multiple destinations using appenders.
+
+Let's write the appender.
+
+[ENDSCRIPT]
 
 **Introduction:**
 
-TODO
+Now that we have our formatter set up, we need to create an appender that will send our logs to Dynatrace. The appender will use HTTP to send formatted logs to Dynatrace's API endpoint.
+
+We'll configure Semantic Logger with a custom HTTP appender that:
+- Formats logs using our FlatJsonFormatter
+- Sends them to the Dynatrace logs ingest API
+- Includes proper authentication headers
 
 **Description:**
 
@@ -662,19 +786,34 @@ Next to set up the Dynatrace secrets.
 
 **Acceptance Criteria:**
 
-TODO
+* Appender code written
 
 **Solution:**
 
-TODO
+[SCRIPT]
+
+Here's the appender in the codebase.
+
+Next up we'll configure the Dynatrace secrets.
+
+[ENDSCRIPT]
 
 
 
 # Task - 3d. Build - Generate Dynatrace Secrets
 
+[SCRIPT]
+
+We'll generate secrets in Dynatrace first.
+
+This will allow us to authenticate with Dynatrace from our app.
+
+[ENDSCRIPT]
+
+
 **Introduction:**
 
-TODO
+In this task, we'll generate API tokens in Dynatrace that will allow our application to authenticate and send logs.
 
 **Description:**
 
@@ -707,18 +846,36 @@ Press “Copy” button to put API token into the clipboard:
 
 **Acceptance Criteria:**
 
-TODO
+* API token created and copied into clipboard.
 
 **Solution:**
 
-TODO
+[SCRIPT]
+
+You'll have the API tokens in your clipboard.
+
+Let's add those to our Replit app.
+
+[ENDSCRIPT]
 
 
 # Task - 3e. Build - Add Dynatrace Secrets To Replit
 
+[SCRIPT]
+
+We'll add your Dynatrace API tokens into our Replit app.
+
+This is fiddly and annoying but we're nearly ready to see our logs in Dynatrace.
+
+Keep going!
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+Now that we have generated API tokens in Dynatrace, we need to securely store them in our Replit environment as secrets.
+
+This will allow our application to authenticate and send logs to Dynatrace while keeping the credentials secure.
 
 **Description:**
 
@@ -755,18 +912,35 @@ Add a new secret in Replit called `DYNATRACE_APP_ID`:
 
 **Acceptance Criteria:**
 
-TODO
+* `DYNATRACE_API_TOKEN` set up in Replit secrets
+* `DYNATRACE_APP_ID` set up in Replit secrets
 
 **Solution:**
 
-TODO
+[SCRIPT]
+
+As you can see I've got these two secrets stored in the secrets tab.
+
+Finally, we're ready to fire up the app and check that the logs are in Dynatrace.
+
+[ENDSCRIPT]
 
 
 # Task - 3f. Build - Check Dynatrace Logs
 
+[SCRIPT]
+
+Semantic Logger can now, hopefully, talk to Dynatrace and send logs.
+
+Let's check it's working.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+We'll verify that logs are being properly sent and received in Dynatrace.
+
+This will confirm our instrumentation is working correctly before we start collecting metrics about our bug.
 
 **Description:**
 
@@ -778,14 +952,14 @@ Wait until the `Preview` window has opened:
 
 - 🆘 **Help!** I don’t see the `Preview` window…
     
-    Try looking inside the console tab:
-    
-    ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2038.png)
-    
-    When I’d forgotten to paste in the `FlatJsonFormatter` contents, here’s what I saw:
-    
-    ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2039.png)
-    
+Try looking inside the console tab:
+
+![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2038.png)
+
+When I’d forgotten to paste in the `FlatJsonFormatter` contents, here’s what I saw:
+
+![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2039.png)
+
 
 ## Check For Logs In Dynatrace
 
@@ -811,22 +985,38 @@ You’ll see logs:
 
 **Acceptance Criteria:**
 
-TODO
+* App is running
+* Logs are showing in Dynatrace
 
 **Solution:**
 
-TODO
+[SCRIPT]
+
+Here are what my logs look like.
+
+Yours may differ in how many or what they appear.
+
+Now we can see the logs, we'll simulate some load on the app.
+
+[ENDSCRIPT]
 
 
 
 # Task - 3g. Build - Simulate Users
 
+[SCRIPT]
+
+Now that we have our logging infrastructure set up, we need to generate some test traffic to trigger the errors.
+
+In a real production system this step wouldn't be necessary!
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+We'll simulate multiple users interacting with our application to gather meaningful data about the pattern size issue.
 
 **Description:**
-Now we need to simulate users using the app.
 
 Switch back to Replit.
 
@@ -848,25 +1038,42 @@ Wait for the script to complete. If you’ve run it via the GUI you’ll need to
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2048.png)
 
-Next we’ll use the graphs.
+After the script has completed, you'll need to wait for 2 minutes as the Dynatrace ingest API can be a bit slow.
 
 
 **Acceptance Criteria:**
 
-TODO
+* Run `bin/hammer` to simulate users hammering the app
+* Wait for the script to finish
+* Wait for another 2 minutes
 
 **Solution:**
 
-TODO
+[SCRIPT]
 
+Here's what my Dynatrace looks like.
+
+You can see lots of logs flowing in.
+
+Next we’ll use the logs and graphs to answer our question!
+
+[ENDSCRIPT]
 
 
 
 # Task - 4a. Use - Find Errors in the Logs
 
+[SCRIPT]
+
+Now we've got logging all set up, we should be very close to answering our question!
+
+First, let's find all the errors in the logs.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+We'll analyze logs in Dynatrace to look for patterns in the errors.
 
 **Description:**
 
@@ -902,64 +1109,79 @@ No, nor can I.
 
 - **⚠️  Common anti-pattern - not enough data!**
     
-    Teams I’ve worked with are often held back by one simple limitation:
-    
-    **They haven’t enough data to reason about their app.**
-    
-    I see teams trying to debug issues with what you see above.
-    
-    This is a waste of time. The minimal data above is utterly useless.
-    
-    So what do I see engineers do? They guess.
-    
-    > The defect might be in `pattern.rb`? Let’s take a look at the code… hmmm… that looks OK… let’s see… maybe the error is in the controller?
-    > 
-    
-    Engineers go round in circles, endlessly guessing, never figuring out what’s really going on.
-    
-    The results? Wasted time, effort, demotivated engineers and learned helplessness.
-    
-    **Observability is answering interesting questions that allow you to reason about your app.**
-    
-    Without relevant data, that’s simply impossible.
-    
-    The good news - once you break this “let’s guess” mentality and start instrumenting your app to gather data and answer questions, it’s a virtuous cycle.
-    
-    Observability isn’t a check box in an endless list of “non functional requirements”.
-    
-    It’s a force multiplier for you and your team. 🚀
+Teams I’ve worked with are often held back by one simple limitation:
+
+**They haven’t enough data to reason about their app.**
+
+I see teams trying to debug issues with what you see above.
+
+This is a waste of time. The minimal data above is utterly useless.
+
+So what do I see engineers do? They guess.
+
+> The defect might be in `pattern.rb`? Let’s take a look at the code… hmmm… that looks OK… let’s see… maybe the error is in the controller?
+
+Engineers go round in circles, endlessly guessing, never figuring out what’s really going on.
+
+The results? Wasted time, effort, demotivated engineers and learned helplessness.
+
+**Observability is answering interesting questions that allow you to reason about your app.**
+
+Without relevant data, that’s simply impossible.
+
+The good news - once you break this “let’s guess” mentality and start instrumenting your app to gather data and answer questions, it’s a virtuous cycle.
+
+Observability isn’t a check box in an endless list of “non functional requirements”.
+
+It’s a force multiplier for you and your team. 🚀
     
 **Acceptance Criteria:**
 
-TODO
+* Searched for `ERROR`
+* Opened up an error log to see inadequate data
 
 **Solution:**
 
-TODO
+[SCRIPT]
+
+Scrolling up and down here, I can see this doesn't contain anything interesting.
+
+So, instead of trying to guess what might be happening, we need to gather more data.
+
+So we go back to the build step.
+
+[ENDSCRIPT]
 
 
 
 ## Task - 3. Build - Add Data Needed
 
+[SCRIPT]
+
+If we can't answer questions, we're not gathering the right data.
+
+This is the part I see few teams spending time on!
+
+We can improve observability by instrumenting our code with extra attributes.
+
+Let's do that now.
+
+[ENDSCRIPT]
 
 **Introduction:**
 
-TODO
+We need to add structured logging to gather data about pattern dimensions and errors. This will help us determine if errors only happen with certain image sizes.
 
 **Description:**
-
 
 We already decided which data to gather - we've spent this long just getting *any* logs into the system.
 
 As a reminder:
 
-**Event**: `Pattern#add_border_to_preview` called
-
-**Filter by**: None
-
-**Group by**: None
-
-**Attributes**: Pattern Width, Pattern Height, Error
+**1. Event**: `Pattern#add_border_to_preview` called
+**2. Filter by**: None
+**3. Group by**: None
+**4. Attributes**: Pattern Width, Pattern Height, Error
 
 Let’s build code to collect this data.
 
@@ -1031,26 +1253,34 @@ Add the added lines indicated below:
 
 **Acceptance Criteria:**
 
-TODO
+* `#add_border_to_preview` has been instrumented
+* All `do` `end`s match up with no syntax errors
 
 **Solution:**
 
-TODO
+[SCRIPT]
 
+Here's the instrumentation in my editor.
+
+Now for the cool part - time to see these extra attributes in the logs.
+
+[ENDSCRIPT]
 
 
 ## Task - 4b. Use - See Extra Attributes In Logs
 
 **Introduction:**
+Now that we've added instrumentation to track pattern sizes and errors, let's examine the logs in Dynatrace to see if we can identify any patterns in the failures.
 
-TODO
+We'll look specifically at the width and height attributes we added to determine if errors correlate with specific image dimensions.
 
 **Description:**
-Restart the server (Hit “Stop” then “Run”)
 
-Hammer the server again.
+Restart the server (Hit “Stop” then “Run”).
 
-Wait for ~1 minute.
+Hammer the server again using `bin/hammer`.
+
+Wait for ~2 minutes.
 
 Now we’ll see our new logs in Dynatrace.
 
@@ -1069,7 +1299,7 @@ There are two different kinds of logs here:
 
 Click on the specific `Error adding border to preview` 
 
-You’ll see the extra data we need:
+You’ll see the extra data:
 
 - `app.pattern.height`  - Pattern height
 - `app.pattern.width` - Pattern width
@@ -1077,6 +1307,36 @@ You’ll see the extra data we need:
 - [`event.name`](http://event.name) - the event name we can search for
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2060.png)
+
+
+**Acceptance Criteria:**
+
+* App restarted
+* Users simulated with `bin/hammer`
+* After 2 minutes, Dynatrace errors visible
+* Extra attributes examined
+
+**Solution:**
+
+[SCRIPT]
+
+Great! We've got the data into the logs.
+
+The biggest remaining hurdle is using Dynatrace to search for what we need to answer the question.
+
+[ENDSCRIPT]
+
+
+## Task - 4c. Use - Show Attributes As Columns
+
+
+**Introduction:**
+
+Now that we have our logs in Dynatrace, we'll learn how to filter and display the specific attributes we need to analyze the pattern size issue.
+
+We'll use Dynatrace's query interface to show width, height and error status for each pattern, similar to how we would write a SQL query to analyze this data.
+
+**Description:**
 
 Reminder of the question we're trying to answer:
 
@@ -1090,23 +1350,6 @@ FROM events
 WHERE name = 'app.pattern.border_added_to_preview'
 ```
 
-
-**Acceptance Criteria:**
-
-TODO
-
-**Solution:**
-
-TODO
-
-
-## Task - 4c. Use - Show Attributes As Columns
-
-**Introduction:**
-
-TODO
-
-**Description:**
 Click on a specific error - `Error adding border to preview`
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2061.png)
@@ -1148,25 +1391,40 @@ You’ll see the attributes we care about:
 
 **Acceptance Criteria:**
 
-TODO
+* Filtered by event in Dynatrace
+* Attributes shown as columns
 
 **Solution:**
 
-TODO
+[SCRIPT]
+
+This is what my view looks like in Dynatrace.
+
+You can see the attributes in columns, nice and neat.
+
+We're one step away from answering our question.
+
+[ENDSCRIPT]
 
 
 
 ## Task - 4d. Use - Show All Logs
 
+[SCRIPT]
+
+Filtering by just errors doesn't allow us to see patterns between errors and successes.
+
+So we'll show all logs - both successes and errors.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+Now that we have our logs filtered and formatted properly, we need to look at all logs, not just errors, to understand the pattern of failures.
+
+This will help us identify any correlations between pattern dimensions and errors.
 
 **Description:**
-
-We want to show **all** logs, not just errors.
-
-We need to see the correlation between these different attributes and whether the operation fails or not.
 
 Click the cross next to `status = ERROR`:
 
@@ -1186,32 +1444,55 @@ You’ll see the logs sorted by error:
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2071.png)
 
-## What’s the pattern?
+## Challenge
 
 Take a moment to look at this.
 
 Are there any patterns you can see in the height and the width?
 
+Write down any observations you have.
+
 
 **Acceptance Criteria:**
 
-TODO
+* One observation about patterns you see written down
 
 **Solution:**
     
+[SCRIPT]
+
+Looking through these logs in Dynatrace.
+
 Seems like for most the errors, the width is more than the height. Interesting…
-    
+
+Unexpected facts like this can cause us to reassess our direction.
+
+[ENDSCRIPT]
 
     
 # Task - 1 - Question - Form New Hypothesis
 
+[SCRIPT]
+
+Often I see engineers become wedded to a specific theory.
+
+They pursue it doggedly, despite clues being given to them repeatedly that they're not moving in the right direction.
+
+When to keep asking questions around the same hypothesis and when to switch is a skill.
+
+It always helps to be curious and be open to new directions.
+
+Let's explore another hypothesis.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+After analyzing the logs, we discovered a potential pattern.
+
+We'll explore this pattern to see if we need a new hypothesis.
 
 **Description:**
-
-We've got the answer to our first question.
 
 Based on what we've learned, let's form a new question.
 
@@ -1239,38 +1520,72 @@ And can you think of a question that you can answer definitively that will lead 
     
 **Acceptance Criteria:**
 
-TODO
+* Understand the benefit of staying curious and open to changing hypothesis
+* Create a new hypothesis related to orientation
 
 **Solution:**
+
+[SCRIPT]
+
+This was another hard task. Don't worry if your hypothesis doesn't look like mine.
+
+This is a skill that takes lots of practice to hone.
+
+That said:
 
 **Hypothesis:** Specific orientations cause the errors.
 
 **Question:** Do all errors happen with a specific orientation?
 
+OK, so what data do we need to answer this question?
+
+[ENDSCRIPT]
+
 
 # Task - 2 - Define Data - Explore Group By
 
+[SCRIPT]
+
+We need to decide what data to collect to answer our question about orientation.
+
+This is a perfect case for grouping our data.
+
+But which attributes should we group by?
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+Explore how grouping by an attribute can help discover correlations.
 
 **Description:**
 
+Here's our question:
+
 **Question:** Do all errors happen with a specific orientation?
 
-When establishing correlations, `GROUP BY` is **very powerful**.
+Let's think about what we need:
 
-Can you think of a few fields we can group by to explore this question?
+1. We need to know if there was an error
+2. We need to know the orientation
+3. We need to know how many times each combination occurred
+
+Can you think of a few attributes we can group by to explore this question?
 
 And then can you write a SQL statement that reflects this?
 
 **Acceptance Criteria:**
 
-TODO
+* List attributes we can group by to discover correlations
+* SQL statement we had previously has been amended to include the GROUP BY clause
 
 **Solution**
 
-Group by **Orientation**.
+[SCRIPT]
+
+We want to see how errors and orientation are correlated.
+
+So we group by **Error** and **Orientation**.
 
 **Event**: `app.pattern.border_added_to_preview` called
 
@@ -1289,13 +1604,25 @@ WHERE event.name = 'app.border_added_to_preview'
 GROUP BY error, app.pattern.orientation
 ```
 
+What data are we missing? The orientation of the pattern.
+
+[ENDSCRIPT]
+
 
 
 # Task - 3 - Build - Add Orientation
 
+[SCRIPT]
+
+Thankfully the orientation is already in the database.
+
+All we need to do is add it into the attributes that are logged.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+We'll add orientation as an attribute to our logging and analyze the results in Dynatrace to see if certain orientations are more prone to errors than others.
 
 **Description:**
 We’re missing orientation in Dynatrace.
@@ -1331,13 +1658,17 @@ Wait for a few minutes for the logs to come through into Dynatrace.
 
 **Acceptance Criteria:**
 
-* Add orientation as an extra attribute in the logs
-* Restart the server
-* Run `bin/hammer` again
+* Orientation added as an extra attribute
+* Server restarted
+* `bin/hammer` ran again
 
 **Solution**
 
-Added the orientation as a code attribute.
+[SCRIPT]
+
+
+
+[ENDSCRIPT]
 
 
 # Task - 4. Use - Explore In Dynatrace
