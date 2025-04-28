@@ -4,8 +4,6 @@
 
 # Task 1 - Sign Up To Services
 
-**Video:**
-
 [SCRIPT]
 Hey there! Before we dive into debugging, we need to get our tools ready. We'll be using Replit, Dynatrace and Github. I'll see you on the other side!
 [ENDSCRIPT]
@@ -1666,16 +1664,30 @@ Wait for a few minutes for the logs to come through into Dynatrace.
 
 [SCRIPT]
 
+You can see the extra instrumentation in this code I'm showing.
 
+Next we'll explore this in Dynatrace.
 
 [ENDSCRIPT]
 
 
 # Task - 4. Use - Explore In Dynatrace
 
+[SCRIPT]
+
+Now that we've added orientation to our logs, we can analyze them in Dynatrace to see if there's any correlation between orientation and errors.
+
+Using the instrumentation we've added is one of my favourite parts to understanding what my app is doing.
+
+We're about to see something interesting.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+Now that we have added orientation as an attribute to our logs, we'll explore the data in Dynatrace to see if there's a correlation between image orientation and errors.
+
+We'll group the logs by error status and orientation to identify any patterns.
 
 **Description:**
 Go back to the query in Dynatrace.
@@ -1720,6 +1732,9 @@ What's the answer to our question?
 
 **Solution:**
 
+
+[SCRIPT]
+
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2075.png)
 
 See how there is only three combinations?
@@ -1728,14 +1743,23 @@ Square and portrait images **always** work and landscape **always** errors.
 
 ## **Answer: Every error is in landscape format**.
 
+[ENDSCRIPT]
 
 
 
 # Task - 4b. Use - Reason About Answer
 
+[SCRIPT]
+
+Now we've gathered data, we're ready to read some code and reason about what's going wrong.
+
+[ENDSCRIPT]
+
+
 **Introduction:**
 
-TODO
+Now that we have data showing all errors occur with landscape orientation, let's analyze what this means and how it relates to the code.
+
 
 **Description:**
 Do we have enough data to fix the issue?
@@ -1787,9 +1811,12 @@ When you've got an idea, move on.
 
 **Acceptance Criteria:**
 
-TODO
+* Code has been read
+* Reason for error found
 
 **Solution:**
+
+[SCRIPT]
 
 Aha! **Missing** **`:landscape`** **key.**
 
@@ -1801,12 +1828,28 @@ The app doesn’t support landscape configuration.
 
 To fix this, we’ll add a few lines to **`PREVIEW_WITH_BORDER_DIMENSIONS`:**
 
+[NOSCRIPT]
+
+
 
 ## Task - Fix Defect
 
+[SCRIPT]
+
+OK! Finally, we're ready to fix the defect.
+
+Let's do this!
+
+[ENDSCRIPT]
+
+
 **Introduction:**
 
-TODO
+Now that we've found the bug, let's apply a fix and verify it works.
+
+We'll use git commands to apply a pre-made fix that adds the missing landscape configuration.
+
+After applying the fix, we'll test it by uploading the Puffins pattern again to confirm the images generate correctly.
 
 **Description:**
 
@@ -1835,24 +1878,39 @@ Cheat Sheet: [https://joyfulprogramming.notion.site/fix-bugs-20x-faster-cheat-sh
 
 **Acceptance Criteria:**
 
-TODO
+* Fix applied from Git
+* Fix verified by running app
 
 **Solution:**
+
+[SCRIPT]
 
 You’ll see the images are generated! Hurrah!
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2076.png)
+
+[ENDSCRIPT]
 
 
 # Task - Wrap Up
 
 **Introduction:**
 
-TODO
+Let's reflect on what we've learned in this course about debugging and observability.
 
 **Description:**
 
-You've got through this course. Great!
+You've completed this course. Great!
+
+Here are the things we've covered:
+
+1. Forming testable hypotheses and questions
+2. Deciding what data we need
+3. Building proper instrumentation 
+4. Using logs and visualization tools effectively
+5. Making continuous improvements
+
+Through hands-on practice with a real bug, we saw how structured logging and data-driven debugging can help us find and fix issues much faster than traditional debugging methods.
 
 Now to reflect on what you've learned.
 
