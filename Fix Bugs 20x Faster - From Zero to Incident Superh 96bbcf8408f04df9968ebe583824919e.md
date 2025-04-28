@@ -1,12 +1,13 @@
 # Fix Bugs 20x Faster - From Zero to Incident Superhero - Dynatrace Edition
 
 
-# Task 1 - Sign Up To All Services
+
+# Task 1 - Sign Up To Services
 
 **Video:**
 
 [SCRIPT]
-Hey there! Before we dive into debugging, we need to get our tools ready. I'll see you on the other side!
+Hey there! Before we dive into debugging, we need to get our tools ready. We'll be using Replit, Dynatrace and Github. I'll see you on the other side!
 [ENDSCRIPT]
 
 **Introduction:** Before we can start debugging, we need to set up our development environment with all the necessary tools and services.
@@ -43,14 +44,19 @@ Next we'll create our Rails app.
 [ENDSCRIPT]
 
 
-# Task 2 - Create the App in Replit
+
+# Task 2 - Create the App
+
+[SCRIPT]
+I've built a Rails app ready to go for you with a mystery defect embedded inside.
+
+In this lesson you'll create the Rails app and get it running inside Replit.
+[ENDSCRIPT]
+
 
 **Introduction:**
-```
-Now that we have our accounts set up, let's create our Rails app.
 
-I'll show you how to use the template I've prepared that will help us learn debugging techniques. We'll be building a cross-stitch pattern preview generator - it's a real business problem that will let us explore common debugging scenarios. Let's get started!
-```
+Before we can start debugging, we need to set up our development environment with the Rails app that contains our mystery bug.
 
 
 **Description:**
@@ -61,19 +67,19 @@ I'll show you how to use the template I've prepared that will help us learn debu
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%201.png)
 
-1. Click `Use Template`:
+4. Click `Use Template`:
     
-    ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%202.png)
-    
-2. You’ll see the main screen of the app with the [`README.md`](http://README.md) to the right:
+![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%202.png)
+
+5. You’ll see the main screen of the app with the [`README.md`](http://README.md) to the right:
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%203.png)
 
-1. Click `Run` to run the app:
+6. Click `Run` to run the app:
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%204.png)
 
-1. Wait a few seconds for the server to start up. It’ll auto open a browser with the app:
+7. Wait a few seconds for the server to start up. It’ll auto open a browser with the app:
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%205.png)
 
@@ -86,15 +92,28 @@ You’re all set up!
 
 **Solution:**
 
-TODO
+[SCRIPT]
+
+You can see here the app running in Replit.  Let's move on to seeing the defect.
+
+[ENDSCRIPT]
 
 
 
 # Task 3 - See The Defect
 
+[SCRIPT]
+
+The Rails app has a real life defect. I'll show you what the customer would see and how it would break for them.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+Now that we have our development environment set up, let's explore a real bug in our cross-stitch pattern preview generator.
+
+We'll see how the app behaves differently with two test patterns - one that works and one that fails. This will give us our first clue about what might be going wrong.
+
 
 **Description:**
 
@@ -142,24 +161,41 @@ Wait… and wait… the app hangs and no images are shown.
 
 **Solution:**
 
-TODO
+[SCRIPT]
+
+Everything works normally with the MonaLisa pattern.
+
+Try the Puffins pattern and the app hangs.
+
+What's the solution every team has for this?
+
+The error tracker - Sentry, Airbrake, New Relic.
+
+[ENDSCRIPT]
+
 
 
 # Task - Show Errors
 
+[SCRIPT]
+
+A defect - no worries - we've got an error tracker installed.
+
+We'll look at the defect in the error tracker and we can figure out what's going wrong.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+Let's see the error in our error tracker.
+
+We'll be using a simple open source error tracker called Solid Errors by Stephen Margheim. Thanks Stephen!
 
 **Description:**
 
-Two options.
+Let's open a new terminal. Click search icon at the top right.
 
-**Option 1** - top menu dropdown, hit the Play icon next to “Show Errors”:
-
-![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2010.png)
-
-**Option 2** -  press `Command Shift P`, type `Shell` and choose Shell:
+Type `Shell` and choose Shell:
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2011.png)
 
@@ -177,29 +213,55 @@ Open up the error and see the stack trace:
 
 We can see that the error is coming from `Pattern#add_border_to_preview`.
 
-Any other ideas why? Give yourself a strict timebox of 1 minute.
+Any ideas why? Give yourself a strict timebox of 1 minute.
 
 **Acceptance Criteria:**
 
-TODO
+* Open defect in error tracker
+* Give yourself 60 seconds to come up with any ideas
 
 **Solution:**
 
-No, I didn't come up with anything either.
+[SCRIPT]
 
-This is usually what you get from any error tracking tools.
+What ideas did you come up with?
 
-But why is the app crashing? The code is too complex to diagnose from this.
+It's a bit of a trick question. The correct answer is... "I have no ideas".
 
+This is where I find most teams get stuck.
 
+Error tracking tools are OK, but they're nowhere near enough in today's market.
+
+[ENDSCRIPT]
 
 
 
 # Task - Five Steps to Observable Software
 
+[SCRIPT]
+
+I've wasted hundreds of hours looking at stack traces in error tracking tools, guessing what might be happening.
+
+I started to see this was a huge waste of time.
+
+Observability is often talked about in vague hand wavey terms.
+
+Instead, I've created a 5 step process you can follow.
+
+I call it The Five Steps To Observable Software or SOS.
+
+[ENDSCRIPT]
+
 **Introduction:**
 
-TODO
+When faced with a bug, most developers dive straight into the code trying to find the issue.
+
+This often leads to hours of frustration and wasted time.
+
+Instead, we need a systematic approach to make our software observable and debuggable.
+
+Let's explore the Five Steps to Observable Software (SOS) - a proven methodology that will help you find and fix bugs up to 20x faster.
+
 
 **Description:**
 
@@ -207,21 +269,86 @@ Introducing the five steps to observable software.
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2014.png)
 
+
 ## 1. Question
 
-First step is to ask a question.
+What's the question we want to answer?
+
+## 2. Decide Data
+
+What data do we need to answer our question?
+
+The second step is to identify what data we need to collect to answer our questions and test our hypotheses. This could be logs, metrics, traces, or any other telemetry that will give us insight into the system's behavior.
+
+## 3. Build Instrumentation
+
+How do we get that data into our system?
+
+This step involves adding the necessary code and tools to collect the data we identified. This might mean adding logging statements, metrics collection, tracing capabilities, or other monitoring instrumentation.
+
+## 4. Use Logs or Graphs
+
+How do we visualize the data to answer our question?
+
+Once we have the data, we need to analyze it effectively. This could involve creating dashboards, analyzing log patterns, or building visualizations that help us understand what's happening in our system.
+
+## 5. Improve
+
+How can we make this easier next time?
+
+The final step is continuous improvement.
+
+We look at what we learned and how we can make future debugging easier.
+
+We can go back to any of the previous steps. Maybe we don't need to improve anything and a different question is needed. Maybe we need to decide on different data. Maybe we need better instrumentation.
+
+Let's run through this process.
+
+**Acceptance Criteria:**
+
+* Understood all stages of the Steps To Observable Software
+
+**Solution**
+
+[SCRIPT]
+
+Great! Now you understand the theory, let's apply this process to our problem.
+
+[ENDSCRIPT]
+
+
+# Task - 1a. Question - Form Hypotheses
+
+[SCRIPT]
+
+In order to ask any question that can be tested with data, we need a hypothesis.
+
+Hypotheses are just guesses about why the software might be erroring out.
+
+This is the hardest task so far, so bring your best thinking!
+
+[ENDSCRIPT]
+
+**Introduction:**
+
+The question stage has two steps:
+
+1. Creating a testable hypothesis
+2. Writing a specific question that can test this hypothesis
+
+In this task we'll focus on creating a hypothesis.
+
+**Description:**
 
 We can't form a question directly without creating a few hypotheses as to why the app might be going wrong.
 
-Then we'll form specific questions which will rule in or out each hypthesis.
-
 Hypotheses are just guesses why the app might be erroring.
+
+First we go wide - a bit of brainstorming and lateral thinking is needed.
 
 List out 3 guesses. Don't be too precious about this.
 
 Don't worry about the quality of the guesses or how wild they might be.
-
-The more you create these guesses the better you'll be.
 
 After you've got 3 guesses, rank them by likelihood.
 
@@ -235,22 +362,42 @@ Most likely at the top, least likely at the bottom.
 
 **Solution:**
 
+[SCRIPT]
+
+This is probably the hardest challenge so far.
+
+The good news is as you practice this "guessing" game more, you'll get more of a feel for it.
+
 Here were mine:
 
-### Form Hypotheses
+Hypotheses
 
 * Incorrect image format
 * ImageMagick is installed incorrectly
 * Pattern is too small or too big
 
-### Rank Hypotheses by likelihood
+Ordering by likelihood we get:
 
 1. Pattern is too small or too big
 2. Incorrect image format
 3. ImageMagick is installed incorrectly
 
+So the top hypothesis we chose and the most likely guess is that the pattern is too small or big.
 
-# Task - Convert Hypothesis into Question
+Let's turn this guess into a specific question.
+
+[ENDSCRIPT]
+
+
+
+# Task - 1. Question - Convert Hypothesis into Question
+
+[SCRIPT]
+
+
+
+
+[ENDSCRIPT]
 
 **Introduction:**
 
@@ -292,6 +439,8 @@ Think up just one question you could ask that might determine if this hypothesis
 Here's the question we'll ask:
 
 ### Do the errors only happen on just one size of image?
+
+
 
 
 # Task - Decide Data
@@ -370,8 +519,7 @@ Now that we've identified what data we need to gather, let's set up the instrume
 
 First, we'll install the required gems and create a custom formatter to properly structure our logs. Then we'll add the instrumentation code to track our pattern size metrics.
 
-
-👨‍💻 We’re using Dynatrace. But this general technique can apply to other observability tools.
+👨‍💻 We’re using Dynatrace. This technique applies to all observability tools.
 
 ## Stop server
 
@@ -406,6 +554,17 @@ bundle add semantic_logger rails_semantic_logger
 Do a `git diff` to make sure the `Gemfile` and `Gemfile.lock` are altered correctly:
 
 ![image.png](Fix%20Bugs%2020x%20Faster%20-%20From%20Zero%20to%20Incident%20Superh%2096bbcf8408f04df9968ebe583824919e/image%2020.png)
+
+
+**Acceptance Criteria:**
+
+* 
+
+**Solution:**
+
+TODO
+
+
 
 # Task - 3b. Build - Create an OpenTelemetry formatter
 
