@@ -1,3 +1,9 @@
+Improvements
+
+* Pattern class - what is this? Why are we using it? More explanations.
+
+
+
 # Fix Bugs 20x Faster - From Zero to Incident Superhero - Dynatrace Edition
 
 
@@ -5,7 +11,9 @@
 # Task 1 - Sign Up To Services
 
 [SCRIPT]
+
 Hey there! Before we dive into debugging, we need to get our tools ready. We'll be using Replit, Dynatrace and Github. I'll see you on the other side!
+
 [ENDSCRIPT]
 
 **Introduction:** Before we can start debugging, we need to set up our development environment with all the necessary tools and services.
