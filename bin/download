@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Check if correct number of arguments provided
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 <URL> <filename>"
+    echo "Example: $0 https://example.com/image.png cycle_1_step_3b"
+    exit 1
+fi
+
+URL="$1"
+FILENAME="$2"
+
+# Convert filename: spaces to underscores, lowercase, remove special chars
+CLEAN_FILENAME=$(echo "$FILENAME" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/_/g' | sed 's/__*/_/g' | sed 's/^_\|_$//g')
+
+# Create images directory if it doesn't exist
+mkdir -p images
+
+# Find the next available number for this filename pattern
+BASE_PATTERN="images/${CLEAN_FILENAME}"
+NEXT_NUM=1
+
+# Check if files with this pattern exist and find the highest number
+for file in ${BASE_PATTERN}_*.png; do
+    if [ -f "$file" ]; then
+        # Extract number from filename (e.g., cycle_1_step_3a_01 -> 01)
+        NUM=$(echo "$file" | sed "s|${BASE_PATTERN}_||" | sed 's/\.png$//')
+        if [[ "$NUM" =~ ^[0-9]+$ ]]; then
+            # Remove leading zeros and increment
+            NUM=$((10#$NUM + 1))
+            if [ $NUM -gt $NEXT_NUM ]; then
+                NEXT_NUM=$NUM
+            fi
+        fi
+    fi
+done
+
+# Format the number with leading zero (01, 02, etc.)
+FORMATTED_NUM=$(printf "%02d" $NEXT_NUM)
+FINAL_FILENAME="${CLEAN_FILENAME}_${FORMATTED_NUM}.png"
+
+# Download the file using curl with -L to follow redirects
+curl -L "$URL" --output "images/${FINAL_FILENAME}"
+
+# Check if download was successful
+if [ $? -eq 0 ]; then
+    echo "Successfully downloaded to images/${FINAL_FILENAME}"
+else
+    echo "Failed to download $URL"
+    exit 1
+fi
